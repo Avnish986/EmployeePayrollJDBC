@@ -15,7 +15,6 @@ public class EmployeePayrollService {
 	public EmployeePayrollService() {
 		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
-	
 
 	public EmployeePayrollService(List<EmployeePayrollData> empList) {
 		this.empList = empList;
@@ -59,22 +58,22 @@ public class EmployeePayrollService {
 			new EmployeePayrollFileIOService().printData();
 	}
 
-	
 	public List<EmployeePayrollData> readEmployeePayrollData(IOService dbIo) {
 		if (dbIo.equals(IOService.DB_IO)) {
 			this.empList = new EmployeePayrollDBService().readData();
 		}
 		return this.empList;
 	}
-	
+
 	public void updateEmployeeSalary(String name, double salary) {
 		int result = new EmployeePayrollDBService().updateEmployeeData(name, salary);
 		if (result == 0)
 			return;
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if (employeePayrollData != null)
-			employeePayrollData.basic_pay=salary;
+			employeePayrollData.basic_pay = salary;
 	}
+
 	private EmployeePayrollData getEmployeePayrollData(String name) {
 		for (EmployeePayrollData data : empList) {
 			if (data.name.equals(name)) {
@@ -94,24 +93,29 @@ public class EmployeePayrollService {
 		}
 		return false;
 	}
-	
+
 	public void updateEmployeeSalaryUsingPrepareStatement(String name, double salary) {
 		int result = employeePayrollDBService.updateEmployeeDataUsingPreparedStatement(name, salary);
 		if (result == 0)
 			return;
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if (employeePayrollData != null)
-			employeePayrollData.basic_pay=salary;
+			employeePayrollData.basic_pay = salary;
 	}
-	
+
 	public List<EmployeePayrollData> readEmployeeDetailsForDateRange(IOService dbIo, LocalDate startDate,
 			LocalDate endDate) {
-		if(dbIo.equals(IOService.DB_IO)) {
-			return employeePayrollDBService.getEmployeeDetailsForGivenDateRange(startDate,endDate);
+		if (dbIo.equals(IOService.DB_IO)) {
+			return employeePayrollDBService.getEmployeeDetailsForGivenDateRange(startDate, endDate);
 		}
 		return null;
 	}
 
-	
+	public Map<String, Double> readAverageSalaryByGender(IOService dbIo) {
+		if (dbIo.equals(IOService.DB_IO)) {
+			return employeePayrollDBService.getAverageSalaryByGender();
+		}
+		return null;
+	}
 
 }
