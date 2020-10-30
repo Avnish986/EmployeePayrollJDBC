@@ -103,6 +103,14 @@ public class EmployeePayrollService {
 		if (employeePayrollData != null)
 			employeePayrollData.basic_pay=salary;
 	}
+	
+	public List<EmployeePayrollData> readEmployeeDetailsForDateRange(IOService dbIo, LocalDate startDate,
+			LocalDate endDate) {
+		if(dbIo.equals(IOService.DB_IO)) {
+			return employeePayrollDBService.getEmployeeDetailsForGivenDateRange(startDate,endDate);
+		}
+		return null;
+	}
 
 	
 
