@@ -10,9 +10,12 @@ public class EmployeePayrollService {
 	}
 
 	private List<EmployeePayrollData> empList;
+	private EmployeePayrollDBService employeePayrollDBService;
 
 	public EmployeePayrollService() {
+		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
+	
 
 	public EmployeePayrollService(List<EmployeePayrollData> empList) {
 		this.empList = empList;
@@ -81,15 +84,24 @@ public class EmployeePayrollService {
 		return null;
 	}
 
-	public boolean checkEmployeePayrollInSyncWithDB(String name) {
+	public boolean checkEmployeePayrollInSyncWithDB(String name, double salary) {
 		for (EmployeePayrollData data : empList) {
 			if (data.name.equals(name)) {
-				if (Double.compare(data.basic_pay, 3000000.00) == 0) {
+				if (Double.compare(data.basic_pay, salary) == 0) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	public void updateEmployeeSalaryUsingPrepareStatement(String name, double salary) {
+		int result = employeePayrollDBService.updateEmployeeDataUsingPreparedStatement(name, salary);
+		if (result == 0)
+			return;
+		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+		if (employeePayrollData != null)
+			employeePayrollData.basic_pay=salary;
 	}
 
 	
