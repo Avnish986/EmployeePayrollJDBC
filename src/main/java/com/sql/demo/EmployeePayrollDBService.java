@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class EmployeePayrollDBService {
 
 	private PreparedStatement preparedStatement;
@@ -118,7 +117,7 @@ public class EmployeePayrollDBService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<EmployeePayrollData> getEmployeeDetailsForGivenDateRange(LocalDate startDate, LocalDate endDate) {
 		String sql = String.format("select * from employee_payroll where start between '%s' and '%s';", startDate,
 				endDate);
@@ -132,7 +131,7 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollList;
 	}
-	
+
 	public Map<String, Double> getAverageSalaryByGender() {
 		String sql = "select gender,avg(basic_pay) as avg from employee_payroll group by gender;";
 		Map<String, Double> map = new HashMap<>();
@@ -147,8 +146,30 @@ public class EmployeePayrollDBService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		for (Map.Entry<String, Double> e : map.entrySet()) 
-            System.out.println(e.getKey() + " " + e.getValue()); 
+		for (Map.Entry<String, Double> e : map.entrySet())
+			System.out.println(e.getKey() + " " + e.getValue());
 		return map;
+	}
+
+	public EmployeePayrollData addEmployee(String name, double salary, LocalDate startDate, String gender,
+			String dept) {
+		String sql = String.format(
+				"insert into employee_payroll (name,basic_pay,start,gender,department,deductions,taxable_pay,tax,net_pay) values ('%s',%.2f,'%s','%s','%s',0.00,0.00,0.00,0.00);",
+				name, salary, startDate.toString(), gender, dept);
+		int empId = -1;
+		EmployeePayrollData employeePayrollData = null;
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			int rowsAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+			if (rowsAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if (resultSet.next())
+					empId = resultSet.getInt(1);
+			}
+			employeePayrollData = new EmployeePayrollData(empId, name, salary, startDate);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollData;
 	}
 }
