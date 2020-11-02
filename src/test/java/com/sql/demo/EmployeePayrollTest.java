@@ -1,6 +1,9 @@
 package com.sql.demo;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -74,16 +77,31 @@ public class EmployeePayrollTest {
 //		Assert.assertTrue(result);
 //	}
 	
-	@Test
-	public void givenEmployee_WhenRemovedFromPayroll_ShouldSyncWityhDB() {
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.removeEmployee("Glen");
-		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Glen", 5000000.00);
-		Assert.assertTrue(result);
-	}
+//	@Test
+//	public void givenEmployee_WhenRemovedFromPayroll_ShouldSyncWityhDB() {
+//		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+//		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+//		employeePayrollService.removeEmployee("Glen");
+//		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Glen", 5000000.00);
+//		Assert.assertTrue(result);
+//	}
 
-
+	@Test 
+    public void given3Employees_WhenAdded_ShouldMatchEmpCount() {
+    	EmployeePayrollData[] empPayrollData = {
+    			new EmployeePayrollData(50, "Jeff", 60000.0, LocalDate.now(),"M","sales"),
+    			new EmployeePayrollData(51, "Elon", 70000.0, LocalDate.now(),"M","maketing"),
+    			new EmployeePayrollData(52, "Tim", 50000.0, LocalDate.now(),"M","HR")
+    	};
+    	EmployeePayrollService empPayrollService = new EmployeePayrollService();
+    	empPayrollService.readEmployeePayrollData(IOService.DB_IO);
+    	Instant start = Instant.now();
+    	empPayrollService.addEmployeeToPayrollWithoutThreads(Arrays.asList(empPayrollData));
+    	Instant end = Instant.now();
+    	System.out.println("Duration without thread : " + Duration.between(start, end));
+    	List<EmployeePayrollData> employeePayrollData = empPayrollService.readEmployeePayrollData(IOService.DB_IO);
+    	Assert.assertEquals(11, employeePayrollData.size());
+    }
 
 	
 
