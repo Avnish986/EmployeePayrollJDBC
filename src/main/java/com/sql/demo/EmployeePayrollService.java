@@ -132,5 +132,9 @@ public class EmployeePayrollService {
 				salary, startDate, gender, department, phone, address);
 		empList.add(employeePayrollData);
 	}
+	
+	public void removeEmployee(String name) {
+		employeePayrollDBService.removeEmployee(name);
+	}
 
 }
