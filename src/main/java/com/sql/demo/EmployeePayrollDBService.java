@@ -151,11 +151,11 @@ public class EmployeePayrollDBService {
 		return map;
 	}
 
-	public EmployeePayrollData addEmployee(int id,String name, double salary, LocalDate startDate, String gender,
+	public EmployeePayrollData addEmployee(int id, String name, double salary, LocalDate startDate, String gender,
 			String dept) {
 		String sql = String.format(
 				"insert into employee_payroll (id,name,basic_pay,start,gender,department,deductions,taxable_pay,tax,net_pay) values (%s,'%s',%.2f,'%s','%s','%s',0.00,0.00,0.00,0.00);",
-				id,name, salary, startDate.toString(), gender, dept);
+				id, name, salary, startDate.toString(), gender, dept);
 		String s = startDate.toString();
 		int empId = -1;
 		EmployeePayrollData employeePayrollData = null;
@@ -180,7 +180,7 @@ public class EmployeePayrollDBService {
 			double netPay = salary - tax;
 			String sql1 = String.format(
 					"insert into payroll (id,start,basic_pay,deductions,taxable_pay,tax,net_pay) values (%s,'%s',%.2f,%.2f,%.2f,%.2f,%.2f);",
-					id,s,b,salary, deductions, taxablePay, tax, netPay);
+					id, s, b, salary, deductions, taxablePay, tax, netPay);
 			int rowsAffected = statement.executeUpdate(sql1, statement.RETURN_GENERATED_KEYS);
 			if (rowsAffected == 1) {
 				employeePayrollData = new EmployeePayrollData(empId, name, salary, startDate);
@@ -191,9 +191,9 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollData;
 	}
-	
+
 	public EmployeePayrollData addEmployeeToPayrollERDiagram(int id, String name, double salary, LocalDate startDate,
-			String gender, String Department,String phone,String address) {
+			String gender, String Department, String phone, String address) {
 		String sql = String.format(
 				"insert into employee_payroll (id,name,basic_pay,start,gender,department,deductions,taxable_pay,tax,net_pay) values (%s,'%s',%.2f,'%s','%s','%s',0.00,0.00,0.00,0.00);",
 				id, name, salary, startDate.toString(), gender, Department);
@@ -233,7 +233,9 @@ public class EmployeePayrollDBService {
 
 		int employeeId = 0;
 		try (Statement statement = this.getConnection().createStatement()) {
-			String sql2 = String.format("insert into employee (id,name,phone_no,gender,address) values (%s,'%s','%s','%s','%s');", id,name,phone,gender,address);
+			String sql2 = String.format(
+					"insert into employee (id,name,phone_no,gender,address) values (%s,'%s','%s','%s','%s');", id, name,
+					phone, gender, address);
 			int rowsAffected = statement.executeUpdate(sql2, statement.RETURN_GENERATED_KEYS);
 			if (rowsAffected == 1) {
 				ResultSet resultSet = statement.getGeneratedKeys();
@@ -242,8 +244,39 @@ public class EmployeePayrollDBService {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		}
 		return employeePayrollData;
+	}
+
+	public void removeEmployee(String name) {
+		int empId = -1;
+		EmployeePayrollData employeePayrollData = null;
+		Connection connection = null;
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		int employeeId = 0;
+		try (Statement statement = this.getConnection().createStatement()) {
+			String sql = String.format("select * from employee where name = '%s';", name);
+			ResultSet resultSet = statement.executeQuery(sql);
+			if (resultSet.next()) {
+				employeeId = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		employeeId=36;
+		try (Statement statement = this.getConnection().createStatement()) {
+			String sql = String.format("update employee_payroll set is_active = false where id = %s;", employeeId);
+			int rowsAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
