@@ -117,11 +117,20 @@ public class EmployeePayrollService {
 		}
 		return null;
 	}
-	
-	public void addEmployeeToPayroll(int id,String name, double salary, LocalDate startDate, String gender,String department) {
-		EmployeePayrollData employeePayrollData = employeePayrollDBService.addEmployee(id,name, salary, startDate, gender,department);
+
+	public void addEmployeeToPayroll(int id, String name, double salary, LocalDate startDate, String gender,
+			String department) {
+		EmployeePayrollData employeePayrollData = employeePayrollDBService.addEmployee(id, name, salary, startDate,
+				gender, department);
 		empList.add(employeePayrollData);
 		System.out.println(empList);
+	}
+
+	public void addEmployeeToPayrollERDiagram(int id, String name, double salary, LocalDate startDate, String gender,
+			String department, String phone, String address) {
+		EmployeePayrollData employeePayrollData = employeePayrollDBService.addEmployeeToPayrollERDiagram(id, name,
+				salary, startDate, gender, department, phone, address);
+		empList.add(employeePayrollData);
 	}
 
 }

@@ -56,12 +56,21 @@ public class EmployeePayrollTest {
 //				averageSalaryByGender.get("M").equals(200000.0) && averageSalaryByGender.get("F").equals(2000000.0));
 //	}
 
+//	@Test
+//	public void givenNewEmployee_WhenAdded_ShouldSyncWityhDB() {
+//		EmployeePayrollService service = new EmployeePayrollService();
+//		service.readEmployeePayrollData(IOService.DB_IO);
+//		service.addEmployeeToPayroll(30,"Mark", 5000000.00, LocalDate.now(), "M", "Sales");
+//		boolean result = service.checkEmployeePayrollInSyncWithDB("Mark", 5000000.00);
+//		Assert.assertTrue(result);
+//	}
+	
 	@Test
-	public void givenNewEmployee_WhenAdded_ShouldSyncWityhDB() {
+	public void givenNewEmployee_WhenAddedToPayroll_ShouldSyncWityhDB() {
 		EmployeePayrollService service = new EmployeePayrollService();
 		service.readEmployeePayrollData(IOService.DB_IO);
-		service.addEmployeeToPayroll(30,"Mark", 5000000.00, LocalDate.now(), "M", "Sales");
-		boolean result = service.checkEmployeePayrollInSyncWithDB("Mark", 5000000.00);
+		service.addEmployeeToPayrollERDiagram(36,"Glen", 5000000.00, LocalDate.now(), "M","Sales","9888888888","50,Model Town");
+		boolean result = service.checkEmployeePayrollInSyncWithDB("Glen", 5000000.00);
 		Assert.assertTrue(result);
 	}
 	
