@@ -86,21 +86,38 @@ public class EmployeePayrollTest {
 //		Assert.assertTrue(result);
 //	}
 
+//	@Test 
+//    public void given3Employees_WhenAdded_ShouldMatchEmpCount() {
+//    	EmployeePayrollData[] empPayrollData = {
+//    			new EmployeePayrollData(50, "Jeff", 60000.0, LocalDate.now(),"M","sales"),
+//    			new EmployeePayrollData(51, "Elon", 70000.0, LocalDate.now(),"M","maketing"),
+//    			new EmployeePayrollData(52, "Tim", 50000.0, LocalDate.now(),"M","HR")
+//    	};
+//    	EmployeePayrollService empPayrollService = new EmployeePayrollService();
+//    	empPayrollService.readEmployeePayrollData(IOService.DB_IO);
+//    	Instant start = Instant.now();
+//    	empPayrollService.addEmployeeToPayrollWithoutThreads(Arrays.asList(empPayrollData));
+//    	Instant end = Instant.now();
+//    	System.out.println("Duration without thread : " + Duration.between(start, end));
+//    	List<EmployeePayrollData> employeePayrollData = empPayrollService.readEmployeePayrollData(IOService.DB_IO);
+//    	Assert.assertEquals(11, employeePayrollData.size());
+//    }
+	
 	@Test 
-    public void given3Employees_WhenAdded_ShouldMatchEmpCount() {
+    public void given3Employees_WhenAdded_ShouldMatchEmpCountthreads() {
     	EmployeePayrollData[] empPayrollData = {
-    			new EmployeePayrollData(50, "Jeff", 60000.0, LocalDate.now(),"M","sales"),
-    			new EmployeePayrollData(51, "Elon", 70000.0, LocalDate.now(),"M","maketing"),
-    			new EmployeePayrollData(52, "Tim", 50000.0, LocalDate.now(),"M","HR")
+    			new EmployeePayrollData(53, "Keff", 60000.0, LocalDate.now(),"M","sales"),
+    			new EmployeePayrollData(54, "Slon", 70000.0, LocalDate.now(),"M","maketing"),
+    			new EmployeePayrollData(55, "Kim", 50000.0, LocalDate.now(),"M","HR")
     	};
     	EmployeePayrollService empPayrollService = new EmployeePayrollService();
     	empPayrollService.readEmployeePayrollData(IOService.DB_IO);
     	Instant start = Instant.now();
-    	empPayrollService.addEmployeeToPayrollWithoutThreads(Arrays.asList(empPayrollData));
+    	empPayrollService.addEmployeeToPayrollWithThreads(Arrays.asList(empPayrollData));
     	Instant end = Instant.now();
     	System.out.println("Duration without thread : " + Duration.between(start, end));
     	List<EmployeePayrollData> employeePayrollData = empPayrollService.readEmployeePayrollData(IOService.DB_IO);
-    	Assert.assertEquals(11, employeePayrollData.size());
+    	Assert.assertEquals(14, employeePayrollData.size());
     }
 
 	
