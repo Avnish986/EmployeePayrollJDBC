@@ -1,6 +1,5 @@
 package com.sql.demo;
 
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -191,6 +190,29 @@ public class EmployeePayrollService {
 	public void printEmployeeData() {
 
 		System.out.println(empList);
+	}
+
+	public void addEmployeesToPayrollToDBWithERWithThreads(List<EmployeePayrollData>  employeePayrollDataList) {
+		Map<Integer, Boolean> employeeAdditionStatus = new HashMap<Integer, Boolean>();
+		 employeePayrollDataList.forEach(employeePayrollData -> {
+			Runnable task = () -> {
+				employeeAdditionStatus.put(employeePayrollData.hashCode(), false);
+				System.out.println("Employee Being Added: " + Thread.currentThread().getName());
+				this.addEmployeeToPayrollERDiagram(employeePayrollData.id, employeePayrollData.name, employeePayrollData.basic_pay,
+						employeePayrollData.start, employeePayrollData.gender, employeePayrollData.department,employeePayrollData.phone,employeePayrollData.address);
+				System.out.println("Employee Added: " + Thread.currentThread().getName());
+				employeeAdditionStatus.put(employeePayrollData.hashCode(), true);
+			};
+			Thread thread = new Thread(task, employeePayrollData.name);
+			thread.start();
+		});
+		while (employeeAdditionStatus.containsValue(false)) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+		}
+		
 	}
 
 }
