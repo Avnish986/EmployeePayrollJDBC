@@ -73,7 +73,7 @@ public class EmployeePayrollService {
 			employeePayrollData.basic_pay = salary;
 	}
 
-	private EmployeePayrollData getEmployeePayrollData(String name) {
+	EmployeePayrollData getEmployeePayrollData(String name) {
 		for (EmployeePayrollData data : empList) {
 			if (data.name.equals(name)) {
 				return data;
@@ -221,6 +221,17 @@ public class EmployeePayrollService {
 	public void addEmployeeToPayroll(EmployeePayrollData employeePayrollData, IOService ioService) {
 		
 		empList.add(employeePayrollData);
+	}
+	
+	public void updateEmployeeSalary(String name, double salary, IOService ioService) {
+		if (ioService.equals(IOService.DB_IO)) {
+			int result = employeePayrollDBService.updateEmployeeData(name, salary);
+			if (result == 0)
+				return;
+		}
+		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+		if (employeePayrollData != null)
+			employeePayrollData.basic_pay = salary;
 	}
 
 }
