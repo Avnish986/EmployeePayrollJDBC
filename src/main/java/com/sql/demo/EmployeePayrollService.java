@@ -16,7 +16,7 @@ public class EmployeePayrollService {
 	}
 
 	public EmployeePayrollService(List<EmployeePayrollData> empList) {
-		this.empList = empList;
+		this.empList = new ArrayList<>(empList);
 	}
 
 	private void readEmployeePayrollData(Scanner s) {
@@ -213,6 +213,14 @@ public class EmployeePayrollService {
 			}
 		}
 		
+	}
+	
+
+	//REST API
+	
+	public void addEmployeeToPayroll(EmployeePayrollData employeePayrollData, IOService ioService) {
+		
+		empList.add(employeePayrollData);
 	}
 
 }
