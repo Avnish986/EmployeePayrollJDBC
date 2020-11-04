@@ -233,5 +233,12 @@ public class EmployeePayrollService {
 		if (employeePayrollData != null)
 			employeePayrollData.basic_pay = salary;
 	}
+	
+	public void deleteEmployeePayroll(String name, IOService ioService) {
+		if (ioService.equals(IOService.REST_IO)) {
+			EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+			empList.remove(employeePayrollData);
+		}
+	}
 
 }
